@@ -6,6 +6,9 @@ import com.buildweek.epicenergyservice.entities.RagioneSociale;
 import com.buildweek.epicenergyservice.services.AddressService;
 import com.buildweek.epicenergyservice.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -23,6 +26,7 @@ public class ClientController {
     AddressService as;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public Client postClient(
             @RequestParam("email") String email,
             @RequestParam("ragione_sociale") RagioneSociale ragione_sociale,
@@ -40,9 +44,7 @@ public class ClientController {
 
         Address a = as.findByLocalita(indirizzo_legale);
         Address a1 = as.findByLocalita(indirizzo_operativo);
-
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
-//        String dateAsString = data_ultimo_contatto.format(formatter);
+        
 
         Client c = Client.builder()
                 .email(email)
@@ -71,17 +73,52 @@ public class ClientController {
 
     //filtra per parte del nome
     @GetMapping("/findbyname/{nomeContatto}")
-
-    public List<Client> findByName(@PathVariable String nomeContatto){
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Client>> findByName(@PathVariable String nomeContatto){
         try {
-            return cs.findByName(nomeContatto);
+            return new ResponseEntity<>(cs.findByName(nomeContatto), HttpStatus.OK);
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+ //filtra per data ultimoContatto
+    @GetMapping("/findbyDataUltimoContatto/{c}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Client>> findByDataUltimoContatto(@PathVariable String c){
+    	try {
+    		return new ResponseEntity<> (cs.findByDataUltimoContatto(LocalDate.parse(c)), HttpStatus.OK);
+    	}catch (Exception e) {
+    		 System.out.println(e.getMessage());
+    	}
+    	return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
 
+  //filtra per data di inserimento
+    @GetMapping("/findbyDataInserimento/{c}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Client>> findByDataInserimento(@PathVariable String c){
+    	try {
+    		return new ResponseEntity<> (cs.findByDataInserimento(LocalDate.parse(c)), HttpStatus.OK);
+    	}catch (Exception e) {
+    		 System.out.println(e.getMessage());
+    	}
+    	return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    //filtra per fatturato annuale
+    @GetMapping("/findbyFatturatoAnnuale/{fatturatoannuale}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Client>> findByFatturatoAnnuale(@PathVariable double fatturatoAnnuale){
+    	try {
+    		return new ResponseEntity<> (cs.findByFatturatoAnnuale(fatturatoAnnuale), HttpStatus.OK);
+    	}catch (Exception e) {
+    		 System.out.println(e.getMessage());
+    	}
+    	return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
 
 
 

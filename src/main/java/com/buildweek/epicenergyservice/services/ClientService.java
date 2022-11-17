@@ -40,15 +40,15 @@ public class ClientService {
       return cr.findByNomeContattoContaining(c);
    }
 
-    List<Client> findByFatturatoAnnuale(double c){
+   public List<Client> findByFatturatoAnnuale(double c){
       return cr.findByFatturatoAnnuale(c);
    }
 
-   List<Client> findByDataInserimento(LocalDate c){
+   public List<Client> findByDataInserimento(LocalDate c){
       return cr.findByDataInserimento(c);
    }
 
-   List<Client> findByDataUltimoContatto(LocalDate c){
+   public List<Client> findByDataUltimoContatto(LocalDate c){
       return cr.findByDataUltimoContatto(c);
    }
 

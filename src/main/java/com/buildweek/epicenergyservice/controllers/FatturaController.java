@@ -31,12 +31,13 @@ public class FatturaController {
 
 
     @GetMapping("")
-    @CrossOrigin
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Fattura> getAllFatture() {
         return fs.getAll();
     }
 
     @GetMapping("/pageable")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<Fattura>> getAllPageable(Pageable p) {
         Page<Fattura> findAll = fs.getAllPaginate(p);
 
@@ -49,6 +50,7 @@ public class FatturaController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Fattura> getById(@PathVariable Long id) {
 
         return new ResponseEntity<>(fs.getById(id), HttpStatus.OK);
@@ -57,6 +59,7 @@ public class FatturaController {
 
 
     @PostMapping("/new")
+    @PreAuthorize("hasRole('ADMIN')")
     public void create(
             @RequestParam("anno") int anno,
             @RequestParam("imp") Double imp,
@@ -79,6 +82,7 @@ public class FatturaController {
     }
 
     @PutMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
     public void update(@RequestBody Fattura fattura) {
         try {
             fs.save(fattura);
