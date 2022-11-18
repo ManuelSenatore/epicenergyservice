@@ -1,5 +1,6 @@
 package com.buildweek.epicenergyservice.controllers;
 
+import com.buildweek.epicenergyservice.entities.Address;
 import com.buildweek.epicenergyservice.entities.Client;
 import com.buildweek.epicenergyservice.entities.Fattura;
 import com.buildweek.epicenergyservice.entities.StatoFattura;
@@ -52,15 +53,18 @@ public class FatturaController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Fattura> getById(@PathVariable Long id) {
-
-        return new ResponseEntity<>(fs.getById(id), HttpStatus.OK);
-
+        try {
+            return new ResponseEntity<>(fs.getById(id), HttpStatus.OK);
+        } catch (Exception e){
+            log.error(e.getMessage());
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('ADMIN')")
-    public void create(
+    public Fattura create(
             @RequestParam("anno") int anno,
             @RequestParam("imp") Double imp,
             @RequestParam("id_cliente") Long id_cliente
@@ -76,9 +80,11 @@ public class FatturaController {
             				.build();
            try {
            fs.save(fattura);
+           return fattura;
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+           return null;
     }
 
     @PutMapping("")
@@ -110,15 +116,21 @@ public class FatturaController {
         }
     }
 
+    @GetMapping("/findAll")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<Fattura>> findAll(){
+        return new ResponseEntity<>(fs.getAll(), HttpStatus.OK);
+    }
+
 @GetMapping("/sortbyclients")
  @PreAuthorize("hasRole('ADMIN')")
 public ResponseEntity <List<Fattura>> sortByClient(){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findAllAndSortByClients();
+      return new ResponseEntity<List<Fattura>> (fs.findAllAndSortByClients(), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
 }
 
@@ -126,99 +138,89 @@ public ResponseEntity <List<Fattura>> sortByClient(){
  @PreAuthorize("hasRole('ADMIN')")
 public ResponseEntity <List<Fattura>> sortByStato(){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findAllAndSortByStato();
+      return new ResponseEntity<List<Fattura>> (fs.findAllAndSortByStato(), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 }
 
 @GetMapping("/sortbyanno")
  @PreAuthorize("hasRole('ADMIN')")
 public ResponseEntity <List<Fattura>> sortByAnno(){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findAllAndSortByAnno();
+      return new ResponseEntity<List<Fattura>> (fs.findAllAndSortByAnno(), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 }
 
 @GetMapping("/sortbydata")
  @PreAuthorize("hasRole('ADMIN')")
 public ResponseEntity <List<Fattura>> sortByData(){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findAllAndSortByData();
+      return new ResponseEntity<List<Fattura>> (fs.findAllAndSortByData(), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 }
 
 @GetMapping("/sortbyimporto")
  @PreAuthorize("hasRole('ADMIN')")
 public ResponseEntity <List<Fattura>> sortByImporto(){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findAllAndSortByImporto();
+      return new ResponseEntity<List<Fattura>> (fs.findAllAndSortByImporto(), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 }
 
-@GetMapping("/findbyclient")
+@GetMapping("/findbyclient/{id}")
  @PreAuthorize("hasRole('ADMIN')")
-public ResponseEntity <List<Fattura>> findByClient(@PathVariable String cognomeContatto){
+public ResponseEntity <List<Fattura>> findByClient(@PathVariable("id") Long id){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findByClient(cognomeContatto);
+      return new ResponseEntity<List<Fattura>> (fs.findByClient(id), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 }
 
-@GetMapping("/findbystato")
- @PreAuthorize("hasRole('ADMIN')")
-public ResponseEntity <List<Fattura>> findByStato(@PathVariable String stato){
+@GetMapping("/findbystato/{stato}")
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity <List<Fattura>> findByStato(@PathVariable("stato") String stato){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findByStato(stato);
+      return new ResponseEntity<List<Fattura>> (fs.findByStato(stato), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 }
 
 @GetMapping("/findbyanno/{anno}")
  @PreAuthorize("hasRole('ADMIN')")
 public ResponseEntity <List<Fattura>> findByAnno(@PathVariable int anno){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findByAnno(anno);
+      return new ResponseEntity<List<Fattura>> (fs.findByAnno(anno), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 }
 
 @GetMapping("/findbydata/{data}")
  @PreAuthorize("hasRole('ADMIN')")
-public ResponseEntity <List<Fattura>> findByData(@PathVariable LocalDate data){
+public ResponseEntity <List<Fattura>> findByData(@PathVariable String data){
     try{
-      return (ResponseEntity<List<Fattura>>) fs.findByData(data);
+      return new ResponseEntity<List<Fattura>> (fs.findByData(LocalDate.parse(data)), HttpStatus.OK);
     } catch (Exception e) {
         log.error(e.getMessage());
     }
-    return null;
+    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 }
 
-
-
-
-//      @Query(
-//             "Select f FROM fatture f WHERE DATE(f.data) = :c"
-//      )
-//      List<Fattura> findByData(@Param("d") LocalDate d);
-
-
-//      }
 
 }

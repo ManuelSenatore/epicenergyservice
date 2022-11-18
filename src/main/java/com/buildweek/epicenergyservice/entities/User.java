@@ -1,26 +1,15 @@
 package com.buildweek.epicenergyservice.entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
+import com.buildweek.epicenergyservice.entities.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/* La classe User ha queste
- * caratteristiche: id, nome, cognome, username, password 
- */
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -29,36 +18,40 @@ import lombok.ToString;
 @Setter
 @ToString
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false)
+    private Long id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    private String nomeCompleto;
 
-	private String firstName;
-	private String lastName;
+    private String email;
 
-	@Column(unique = true, nullable = false)
-	private String username;
+    @Column(unique = true, nullable = false)
+    private String username;
 
-	private String password;
+    private String password;
 
-	@ManyToMany
-	@JoinTable(name = "users_roles", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<Role>();
+    public User( String nomeCompleto, String username, String password, String email ) {
+        this.email = email;
+        this.nomeCompleto = nomeCompleto;
+        this.username = username;
+        this.password = password;
+    }
 
-	private Boolean active = true;
+    @ManyToMany // PIU UTENTI POSSONO AVERE PIU RUOLI E VICEVERSA
+    @JoinTable(name = "user_roles", //Nome della tabella che verrà creata
+            joinColumns = @JoinColumn(name = "user_id"),// Crea colonna
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ToString.Exclude
+    private Set<Role> roles = new HashSet<Role>();
 
-	public User(String firstName, String lastName, String username, String password) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.username = username;
-		this.password = password;
-	}
+    private Boolean active = true;
 
-	public void addRole(Role r) {
-		this.roles.add(r);
-	}
+    public void addRole( Role r ) {
+
+        this.roles.add( r );
+
+    }
 
 }

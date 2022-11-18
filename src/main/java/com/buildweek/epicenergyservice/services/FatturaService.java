@@ -1,10 +1,7 @@
 package com.buildweek.epicenergyservice.services;
 
-import com.buildweek.epicenergyservice.entities.Address;
-import com.buildweek.epicenergyservice.entities.Client;
 import com.buildweek.epicenergyservice.entities.Fattura;
 import com.buildweek.epicenergyservice.exceptions.NotFoundException;
-import com.buildweek.epicenergyservice.repositories.AddressRepository;
 import com.buildweek.epicenergyservice.repositories.FatturaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,8 +56,8 @@ public class FatturaService {
         return fr.findAllAndSortByImporto();
     }
 
-    public List<Fattura> findByClient(String c){
-        return fr.findAllByCliente(c);
+    public List<Fattura> findByClient(Long c){
+        return fr.findByCliente(c);
     }
     public List<Fattura> findByStato(String s){
         return fr.findByStato(s);

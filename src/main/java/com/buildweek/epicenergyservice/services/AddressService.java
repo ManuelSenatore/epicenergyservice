@@ -1,7 +1,6 @@
 package com.buildweek.epicenergyservice.services;
 
 import com.buildweek.epicenergyservice.entities.Address;
-import com.buildweek.epicenergyservice.entities.User;
 import com.buildweek.epicenergyservice.exceptions.NotFoundException;
 import com.buildweek.epicenergyservice.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ public class AddressService {
     public List<Address> getAll() {
         return ar.findAll();
     }
+
 
     public Address getById(int id) {
         Optional<Address> ba = ar.findById(id);

@@ -1,14 +1,17 @@
 package com.buildweek.epicenergyservice.controllers;
 
 import com.buildweek.epicenergyservice.entities.Address;
+import com.buildweek.epicenergyservice.entities.Client;
 import com.buildweek.epicenergyservice.entities.Comuni;
 import com.buildweek.epicenergyservice.services.AddressService;
 import com.buildweek.epicenergyservice.services.ComuniService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/address")
@@ -22,6 +25,7 @@ public class AddressController {
 
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public Address postAddress(
             @RequestParam("via") String via,
             @RequestParam("civico") int civico,
@@ -53,5 +57,17 @@ public class AddressController {
             as.save(address);
             return address;
         }
+    }
+
+    @GetMapping("/findAll")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<Address>> findAll(){
+        return new ResponseEntity<>(as.getAll(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteAddress(@PathVariable("id") int id) {
+        as.deleteById(id);
     }
 }

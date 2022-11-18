@@ -26,9 +26,8 @@ public class Client {
     @Enumerated(EnumType.STRING)
     private RagioneSociale ragioneSociale;
     private LocalDate dataUltimoContatto;
-    private double fatturatoAnnuale;
+    private int fatturatoAnnuale;
     private String pec;
-    private int telefono;
     private String emailContatto;
     private String nomeContatto;
     private String cognomeContatto;

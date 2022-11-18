@@ -16,7 +16,11 @@ public class ComuniService {
   ComuniRepository cr;
 
     public Comuni save(Comuni x) {
-       return cr.save(x);
+       try {
+           return cr.save(x);
+       } catch (Exception e){
+           throw new NotFoundException("no comune");
+       }
     }
 
     public Comuni findByComune(String comune) {

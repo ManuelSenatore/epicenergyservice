@@ -1,12 +1,9 @@
 package com.buildweek.epicenergyservice.services;
 
-import com.buildweek.epicenergyservice.entities.Fattura;
 import com.buildweek.epicenergyservice.entities.Provincia;
-import com.buildweek.epicenergyservice.entities.User;
 import com.buildweek.epicenergyservice.exceptions.NotFoundException;
 import com.buildweek.epicenergyservice.repositories.ProvinciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

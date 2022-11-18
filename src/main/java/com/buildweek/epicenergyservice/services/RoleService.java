@@ -33,7 +33,7 @@ public class RoleService {
 
 	public Role getById(Long id) {
 		Optional<Role> ba = repository.findById(id);
-		if (!ba.isPresent())
+		if (ba.isEmpty())
 			throw new NotFoundException("Role not available");
 		return ba.get();
 	}
@@ -44,7 +44,7 @@ public class RoleService {
 
 	public Role getByRole(RoleType roleType) {
 		Optional<Role> ba = repository.findByRoleType(roleType);
-		if (!ba.isPresent())
+		if (ba.isEmpty())
 			throw new NotFoundException("Role not available");
 		return ba.get();
 	}

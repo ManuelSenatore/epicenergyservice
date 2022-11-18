@@ -34,7 +34,7 @@ public class UserService {
 
 	public User getById(Long id) {
 		Optional<User> user = repository.findById(id);
-		if (!user.isPresent())
+		if (user.isEmpty())
 			throw new NotFoundException("User not available");
 		return user.get();
 	}
@@ -54,7 +54,7 @@ public class UserService {
 
 	public User findByUsername(String username) {
 		Optional<User> user = repository.findByUsername(username);
-		if (!user.isPresent())
+		if (user.isEmpty())
 			throw new NotFoundException("No user with that username found");
 		return user.get();
 	}

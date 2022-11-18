@@ -5,15 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.buildweek.epicenergyservice.entities.Fattura;
-import com.buildweek.epicenergyservice.entities.Client;
 
-import com.buildweek.epicenergyservice.entities.StatoFattura;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface FatturaRepository extends JpaRepository<Fattura, Long> {
@@ -79,7 +74,7 @@ public interface FatturaRepository extends JpaRepository<Fattura, Long> {
 
     Optional<Fattura> findById(Long id);
 
-	List<Fattura> findByCliente(Long id);
+	List<Fattura> findByCliente(Long c);
 
 	List<Fattura> findByImportoBetween(Double importoMinimo, Double importoMassimo);
 

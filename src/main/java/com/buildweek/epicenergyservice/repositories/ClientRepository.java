@@ -2,14 +2,9 @@ package com.buildweek.epicenergyservice.repositories;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.buildweek.epicenergyservice.entities.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.buildweek.epicenergyservice.entities.Client;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -81,7 +76,7 @@ public interface ClientRepository  extends JpaRepository<Client, Long> {
 
 //    Page<Client> findByRagioneSocialeContainingIgnoreCase(String nomeContatto, Pageable p);
 //
-    List<Client> findByFatturatoAnnuale(Double fatturatoAnnuale);
+    List<Client> findByFatturatoAnnuale(int fatturatoAnnuale);
 
     List<Client> findByDataInserimento(LocalDate dataInserimento);
 
